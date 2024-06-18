@@ -16,11 +16,9 @@ const courseSchema = new Schema({
     thumbnail:{
         publicId: {
             type: String,
-            required: true,
         },
         secureURL:{
             type: String,
-            required: true,
         }
     },
     lectures:[
@@ -30,11 +28,9 @@ const courseSchema = new Schema({
             lecture:{
                 publicId: {
                     type: String,
-                    required: true,
                 },
                 secureURL:{
                     type: String,
-                    required: true,
                 }
             }
         }

@@ -3,7 +3,7 @@ import WebinarCuate from "../assets/Webinar-cuate.png";
 function Services() {
   return (
     <div className="bg-[#FBF4E2] font-outfit flex flex-col justify-center items-center min-h-screen gap-5 p-5 shadow-lg lg:grid lg:grid-cols-2">
-      <div className="shadow-sm">
+      <div>
         <img src={WebinarCuate} alt="webinar" />
       </div>
       <div className=" text-5xl font-light flex flex-col justify-center items-center gap-2 lg:text-8xl">

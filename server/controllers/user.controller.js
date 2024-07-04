@@ -96,7 +96,7 @@ export const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!password || !email) {
-      return next(new AppError("Fill in all the details to login"));
+      return next(new AppError("Fill in all the details to login", 400));
     }
 
     const user = await User.findOne({ email }).select("+password");
@@ -125,16 +125,20 @@ export const login = async (req, res, next) => {
 };
 
 export const logout = (req, res, next) => {
-  res.cookie("token", null, {
-    secure: true,
-    maxAge: 0,
-    httpOnly: true,
-  });
+  try {
+    res.cookie("token", null, {
+      secure: true,
+      maxAge: 0,
+      httpOnly: true,
+    });
 
-  res.status(201).json({
-    success: true,
-    message: "Logged out successfully !!!",
-  });
+    res.status(201).json({
+      success: true,
+      message: "Logged out successfully !!!",
+    });
+  } catch (err) {
+    return next(new AppError("Failed to logout", 400));
+  }
 };
 
 export const getProfile = async (req, res, next) => {

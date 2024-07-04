@@ -27,7 +27,7 @@ function Landing() {
         <img
           src={LearningCuate}
           alt="Learning cuate"
-          className="lg:h-[470px] lg:w-[460px] lg:shadow-lg"
+          className="lg:h-[470px] lg:w-[460px]"
         />
       </div>
     </div>

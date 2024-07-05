@@ -5,6 +5,7 @@ import { BsPersonCircle } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { createAccount } from "../Redux/Slices/AuthSlice";
+import { isValidEmail, isValidPassword } from "../helpers/regexMatcher";
 function SignUp() {
   const [previewImg, setPreviewImg] = useState("");
 
@@ -60,18 +61,12 @@ function SignUp() {
       return;
     }
 
-    if (
-      !signupData.email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-    ) {
+    if (!isValidEmail(signupData.email)) {
       toast.error("Please check your email");
       return;
     }
 
-    if (
-      !signupData.password.match(
-        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
-      )
-    ) {
+    if (!isValidPassword(signupData.password)) {
       toast.error(
         "Password must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
       );

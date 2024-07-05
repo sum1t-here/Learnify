@@ -5,6 +5,7 @@ import { config } from "dotenv";
 import morgan from "morgan";
 import userRoutes from "./routes/user.routes.js";
 import courseRoutes from "./routes/course.routes.js";
+import miscRoutes from "./routes/misc.routes.js";
 import paymentRoutes from "./models/payment.model.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 config();
@@ -30,6 +31,7 @@ app.use("/welcome", (req, res) => {
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/course", courseRoutes);
 app.use("/api/v1/payments", paymentRoutes);
+app.use("/api/v1", miscRoutes);
 
 app.all("*", (req, res) => {
   res

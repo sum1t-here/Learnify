@@ -55,7 +55,7 @@ function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4 font-outfit">
+    <div className="min-h-screen flex flex-col items-center justify-center  bg-gray-100 p-4 font-outfit">
       <h1 className="text-3xl font-bold mb-6 text-[#333333]">Contact Us</h1>
       <form
         onSubmit={handleSubmit}

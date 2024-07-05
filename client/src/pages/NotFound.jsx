@@ -1,4 +1,4 @@
-import errorimage from "../assets/404.png";
+import errorimage from "../assets/404error.png";
 
 function NotFound() {
   return (

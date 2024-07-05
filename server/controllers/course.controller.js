@@ -55,8 +55,8 @@ export const createCourse = async (req, res, next) => {
         folder: "lms",
       });
       if (result) {
-        course.thumbnail.publicId = result.public_id;
-        course.thumbnail.secureURL = result.secure_url;
+        course.thumbnail.public_id = result.public_id;
+        course.thumbnail.secure_url = result.secure_url;
       }
 
       fs.rm(`uploads/${req.file.filename}`);

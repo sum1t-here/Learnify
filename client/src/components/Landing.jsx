@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import LearningCuate from "../assets/Learning-cuate.png";
 
 function Landing() {
+  const navigate = useNavigate();
   return (
     <div className=" bg-[#F9C365] min-h-screen shadow-lg">
       <div className="flex flex-col text-center items-center pt-32 pr-5 pl-5 gap-3 lg:grid lg:grid-cols-2 lg:gap-10">
@@ -17,7 +19,12 @@ function Landing() {
             matches your niche
           </div>
           <div>
-            <button className=" border border-black rounded-3xl p-2 drop-shadow-md cursor-pointer">
+            <button
+              className=" border border-black rounded-3xl p-2 drop-shadow-md cursor-pointer transition duration-300 ease-in-out transform hover:bg-black hover:text-white hover:scale-105"
+              onClick={() => {
+                navigate("/courses");
+              }}
+            >
               Enroll Now
             </button>
           </div>

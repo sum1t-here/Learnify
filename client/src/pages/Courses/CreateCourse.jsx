@@ -2,7 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createNewCourse } from "../../Redux/Slices/CourseSlice";
 
 function CreateCourse() {
@@ -78,9 +78,12 @@ function CreateCourse() {
         className="flex flex-col justify-center gap-5 rounded-lg p-4  w-[700px] my-10 shadow-[0_0_10px_black] relative"
         noValidate
       >
-        <Link className="absolute top-8 text-2xl link text-accent cursor-pointer">
+        <div
+          className="absolute top-8 text-2xl link text-accent cursor-pointer"
+          onClick={() => navigate(-1)}
+        >
           <AiOutlineArrowLeft />
-        </Link>
+        </div>
 
         <h1 className="text-center text-2xl font-bold">Create New Course</h1>
 
@@ -88,10 +91,10 @@ function CreateCourse() {
           <div className="gap-y-6">
             <div>
               <label htmlFor="image_uploads" className="cursor-pointer">
-                {userInput.previewImage ? (
+                {userInput.previewImg ? (
                   <img
                     className="w-full h-44 m-auto border"
-                    src={userInput.previewImage}
+                    src={userInput.previewImg}
                   />
                 ) : (
                   <div className="w-full h-44 m-auto flex items-center justify-center border">

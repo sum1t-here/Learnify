@@ -71,7 +71,7 @@ function Header() {
 
       {isLoggedIn && (
         <div className="hidden lg:flex flex-row gap-6 text-right">
-          <Link to="/profile">
+          <Link to="/user/profile">
             <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-full">
               Profile
             </button>
@@ -135,7 +135,7 @@ function Header() {
 
           {isLoggedIn && (
             <div className="flex flex-row mr-2 gap-6 items-center text-center mt-5 justify-center">
-              <Link to="/profile">
+              <Link to="/user/profile">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-full"
                   onClick={closeMenu}

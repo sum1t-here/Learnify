@@ -1,4 +1,4 @@
-import User from "../models/user.model";
+import User from "../models/user.model.js";
 import AppError from "../utils/error.util.js";
 import crypto from "crypto";
 import { razorpay } from "../server.js";
@@ -31,13 +31,14 @@ export const buySubscription = async (req, res, next) => {
 
     const subscription = await razorpay.subscriptions.create({
       plan_id: process.env.RAZORPAY_PLAN_ID,
-      customer_notify: 1,
+      customer_notify: 1, // 1 means razorpay will handle notifying the customer, 0 means we will not notify the customer
+      total_count: 12, // 12 means it will charge every month for a 1-year sub.
     });
 
     user.subscription.id = subscription.id;
     user.subscription.status = subscription.status;
 
-    await User.save();
+    await user.save();
 
     res.status(200).json({
       success: true,
@@ -45,6 +46,7 @@ export const buySubscription = async (req, res, next) => {
       subscription_id: subscription.id,
     });
   } catch (err) {
+    console.log(err);
     return next(new AppError(err));
   }
 };
@@ -75,6 +77,7 @@ export const verifySubscription = async (req, res, next) => {
       .digest("hex");
 
     if (generatedSignature !== razorpay_signature) {
+      console.log(generatedSignature, razorpay_signature);
       return next(new AppError("Payment not verified", 500));
     }
 
@@ -84,8 +87,8 @@ export const verifySubscription = async (req, res, next) => {
       razorpay_subscription_id,
     });
 
-    (user.subscription.status = "active"), await user.save();
-
+    user.subscription.status = "active";
+    await user.save();
     res.status(200).json({
       success: true,
       message: "Payment verified successfully",
@@ -150,7 +153,7 @@ export const allPayment = async (req, res, next) => {
 
     // Find all subscriptions from razorpay
     const allPayments = await razorpay.subscriptions.all({
-      count: count ? count : 10, // If count is sent then use that else default to 10
+      count: count ? count : 100, // If count is sent then use that else default to 10
       skip: skip ? skip : 0, // // If skip is sent then use that else default to 0
     });
 

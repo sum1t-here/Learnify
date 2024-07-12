@@ -38,7 +38,7 @@ const courseSchema = new Schema(
     ],
     numberOfLectures: {
       type: String,
-      required: true,
+      default: 0,
     },
     createdBy: {
       type: String,

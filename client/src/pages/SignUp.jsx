@@ -73,14 +73,14 @@ function SignUp() {
       return;
     }
 
-    // const formData = new FormData();
-    // formData.append("fullname", signupData.fullname);
-    // formData.append("email", signupData.email);
-    // formData.append("password", signupData.password);
-    // formData.append("avatar", signupData.avatar);
+    const formData = new FormData();
+    formData.append("fullname", signupData.fullname);
+    formData.append("email", signupData.email);
+    formData.append("password", signupData.password);
+    formData.append("avatar", signupData.avatar);
 
     // dispatch create account action
-    const response = await dispatch(createAccount(signupData));
+    const response = await dispatch(createAccount(formData));
     if (response?.payload?.success) navigate("/");
 
     setSignupData({
@@ -123,7 +123,7 @@ function SignUp() {
               className="hidden"
               id="image_uploads"
               name="image_uploads"
-              accept=".jpg, .jpeg, .png, .svg"
+              accept=".jpg, .jpeg, .png, .svg, .webp"
               onChange={handleImage}
             />
             <label className="p-2 font-outfit" htmlFor="fullname">

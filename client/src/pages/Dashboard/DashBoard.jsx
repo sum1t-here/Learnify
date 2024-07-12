@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteCourse, getAllCourses } from "../../Redux/Slices/CourseSlice";
 import { getPaymentRecord } from "../../Redux/Slices/RazorpaySlice";
-import { getStatsData } from "../../Redux/Slices/StatSlice";
+import { getAllUserCount, getStatsData } from "../../Redux/Slices/StatSlice";
 ChartJS.register(
   ArcElement,
   BarElement,
@@ -33,11 +33,11 @@ function DashBoard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { allUsersCount, subscribedCount } = useSelector((state) => state.stat);
-  const { allPayments, monthlySalesRecord } = useSelector(
-    (state) => state.razorpay
+  const { subscribedCount, allPayments, monthlySalesRecord } = useSelector(
+    (state) => state.stat
   );
-
+  // console.log(subscribedCount, allPayments, monthlySalesRecord);
+  const { allUsersCount } = useSelector((state) => state.stat);
   const userData = {
     labels: ["Registered User", "Enrolled User"],
     fontColor: "white",
@@ -96,6 +96,7 @@ function DashBoard() {
       await dispatch(getAllCourses());
       await dispatch(getStatsData());
       await dispatch(getPaymentRecord());
+      await dispatch(getAllUserCount());
     })();
   }, []);
 

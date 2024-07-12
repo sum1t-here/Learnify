@@ -26,19 +26,19 @@ function DisplayLectures() {
   }
 
   useEffect(() => {
-    console.log(state);
     if (!state) navigate("/courses");
     dispatch(getCourseLectures(state._id));
   }, []);
 
   return (
-    <div className="flex flex-col gap-10 items-center  min-h-[90vh] py-10 text-white mx-[5%]">
+    <div className="flex flex-col gap-10 items-center justify-center min-h-[90vh] py-10 text-wihte mx-[5%]">
       <div className="text-center text-2xl font-semibold text-yellow-500">
         Course Name: {state?.title}
       </div>
+
       {lectures && lectures.length > 0 ? (
         <div className="flex justify-center gap-10 w-full">
-          {/* Left section for playing videos and displaying course details */}
+          {/* left section for playing videos and displaying course details to admin */}
           <div className="space-y-5 w-[28rem] p-2 rounded-lg shadow-[0_0_10px_black]">
             <video
               src={lectures && lectures[currentVideo]?.lecture?.secure_url}
@@ -47,53 +47,60 @@ function DisplayLectures() {
               disablePictureInPicture
               muted
               controlsList="nodownload"
-            />
+            ></video>
             <div>
               <h1>
-                <span className="text-yellow-500">Title: </span>
+                <span className="text-yellow-500"> Title: </span>
                 {lectures && lectures[currentVideo]?.title}
               </h1>
               <p>
-                <span className="text-yellow-500">Description: </span>
+                <span className="text-yellow-500 line-clamp-4">
+                  Description:{" "}
+                </span>
                 {lectures && lectures[currentVideo]?.description}
               </p>
             </div>
           </div>
 
-          {/* Right section for displaying list of lectures */}
+          {/* right section for displaying list of lectres */}
           <ul className="w-[28rem] p-2 rounded-lg shadow-[0_0_10px_black] space-y-4">
             <li className="font-semibold text-xl text-yellow-500 flex items-center justify-between">
-              <p>Lectures List</p>
+              <p>Lectures list</p>
               {role === "ADMIN" && (
                 <button
                   onClick={() =>
                     navigate("/course/addlecture", { state: { ...state } })
                   }
-                  className="btn-primary px-2 py-1 rounded-md font-semibold text-sm"
+                  className="bg-green-300 px-2 py-1 rounded-md font-semibold text-sm"
                 >
-                  Add New Lecture
+                  <p className="text-gray-800">Add new lecture</p>
                 </button>
               )}
             </li>
-            {lectures.map((lecture, idx) => (
-              <li className="space-y-2" key={lecture._id}>
-                <p
-                  className="cursor-pointer"
-                  onClick={() => setCurrentVideo(idx)}
-                >
-                  <span>Lecture {idx + 1}: </span>
-                  {lecture.title}
-                </p>
-                {role === "ADMIN" && (
-                  <button
-                    onClick={() => onLectureDelete(state._id, lecture._id)}
-                    className="btn-accent px-2 py-1 rounded-md font-semibold text-sm"
-                  >
-                    Delete Lecture
-                  </button>
-                )}
-              </li>
-            ))}
+            {lectures &&
+              lectures.map((lecture, idx) => {
+                return (
+                  <li className="space-y-2" key={lecture._id}>
+                    <p
+                      className="cursor-pointer"
+                      onClick={() => setCurrentVideo(idx)}
+                    >
+                      <span> Lecture {idx + 1} : </span>
+                      {lecture?.title}
+                    </p>
+                    {role === "ADMIN" && (
+                      <button
+                        onClick={() =>
+                          onLectureDelete(state?._id, lecture?._id)
+                        }
+                        className="bg-red-500 px-2 py-1 rounded-md font-semibold text-sm"
+                      >
+                        Delete lecture
+                      </button>
+                    )}
+                  </li>
+                );
+              })}
           </ul>
         </div>
       ) : (
@@ -104,7 +111,7 @@ function DisplayLectures() {
             }
             className="btn-primary px-2 py-1 rounded-md font-semibold text-sm"
           >
-            Add New Lecture
+            Add new lecture
           </button>
         )
       )}

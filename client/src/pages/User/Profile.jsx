@@ -21,7 +21,7 @@ function Profile() {
     <div className="min-h-[90vh] flex items-center justify-center bg-gray-100">
       <div className="my-10 flex flex-col gap-6 rounded-lg p-6 bg-white text-[#333333] w-full max-w-md shadow-lg">
         <img
-          src={userData?.avatar?.secure_url}
+          src={userData?.avatar?.secureURL}
           className="w-40 mx-auto rounded-full border-4 border-[#34485E] shadow-md"
           alt="User Avatar"
         />
@@ -30,7 +30,7 @@ function Profile() {
         </h3>
         <div className="grid grid-cols-2 gap-2 text-lg">
           <p className="font-semibold">Email:</p>
-          <p>{userData?.email}</p>
+          <p className="overflow-auto">{userData?.email}</p>
           <p className="font-semibold">Role:</p>
           <p>{userData?.role}</p>
           <p className="font-semibold">Subscription:</p>

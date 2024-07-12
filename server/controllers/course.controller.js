@@ -1,7 +1,9 @@
+import { error } from "console";
 import Course from "../models/course.model.js";
 import AppError from "../utils/error.util.js";
 import cloudinary from "cloudinary";
 import fs from "fs/promises";
+import path from "path";
 
 export const getAllCourses = async (req, res, next) => {
   try {
@@ -31,6 +33,12 @@ export const getLecturesByCourseId = async (req, res, next) => {
   }
 };
 
+/**
+ * @CREATE_COURSE
+ * @ROUTE @POST {{URL}}/api/v1/course
+ * @ACCESS Private (admin only)
+ */
+
 export const createCourse = async (req, res, next) => {
   try {
     const { title, description, category, createdBy } = req.body;
@@ -53,6 +61,7 @@ export const createCourse = async (req, res, next) => {
     if (req.file) {
       const result = await cloudinary.v2.uploader.upload(req.file.path, {
         folder: "lms",
+        timeout: 60000, // increase the timeout to 60 seconds
       });
       if (result) {
         course.thumbnail.public_id = result.public_id;
@@ -68,7 +77,13 @@ export const createCourse = async (req, res, next) => {
       course,
     });
   } catch (err) {
-    return next(new AppError(err, 404));
+    console.log(err);
+    // Empty the uploads directory without deleting the uploads directory
+    for (const file of await fs.readdir("uploads/")) {
+      await fs.unlink(path.join("uploads/", file));
+    }
+
+    return next(new AppError(err.message, 404));
   }
 };
 
@@ -94,7 +109,7 @@ export const updateCourse = async (req, res, next) => {
       message: "Course updated successfully",
     });
   } catch (err) {
-    return next(new AppError(err, 404));
+    return next(new AppError(err.message, 404));
   }
 };
 
@@ -111,7 +126,7 @@ export const deleteCourse = async (req, res, next) => {
     }
 
     // Remove course
-    await course.remove();
+    await course.deleteOne();
 
     // Send the message as response
     res.status(200).json({
@@ -151,8 +166,8 @@ export const addLecturesByCourseId = async (req, res, next) => {
       });
       if (result) {
         // Set the public_id and secure_url in array
-        lectureData.publicId = result.public_id;
-        lectureData.secureUrl = result.secure_url;
+        lectureData.public_id = result.public_id;
+        lectureData.secure_url = result.secure_url;
       }
 
       // After successful upload remove the file from local storage
@@ -169,12 +184,19 @@ export const addLecturesByCourseId = async (req, res, next) => {
     // Save the course object
     await course.save();
 
+    console.log(course);
+
     res.status(200).json({
       success: true,
       message: "Course lecture added successfully",
       course,
     });
   } catch (err) {
+    // Empty the uploads directory without deleting the uploads directory
+    for (const file of await fs.readdir("uploads/")) {
+      await fs.unlink(path.join("uploads/", file));
+    }
+    console.log(err);
     return next(new AppError(err, 404));
   }
 };
@@ -183,7 +205,7 @@ export const deleteLecturesByCourseId = async (req, res, next) => {
   try {
     const { courseId, lectureId } = req.query;
 
-    console.log(courseId);
+    console.log(courseId, lectureId);
 
     // Checking if both courseId and lectureId are present
     if (!courseId) {

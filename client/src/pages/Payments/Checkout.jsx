@@ -9,6 +9,7 @@ import {
   purchaseCourseBundle,
   verifyPurchase,
 } from "../../Redux/Slices/RazorpaySlice";
+import { getUserData } from "../../Redux/Slices/AuthSlice";
 
 function Checkout() {
   const dispatch = useDispatch();
@@ -23,14 +24,6 @@ function Checkout() {
     razorpay_signature: "",
   };
 
-  useEffect(() => {
-    async function load() {
-      await dispatch(getRazorpayId());
-      await dispatch(purchaseCourseBundle());
-    }
-    load();
-  }, [dispatch]);
-
   async function handleSubscription(e) {
     e.preventDefault();
     if (!razorpayKey || !subscription_id) {
@@ -40,10 +33,10 @@ function Checkout() {
     const options = {
       key: razorpayKey,
       subscription_id: subscription_id,
-      name: "Learnify Pvt. Ltd.",
+      name: "Coursify Pvt. Ltd.",
       description: "Subscription",
       theme: {
-        color: "#F59E0B",
+        color: "#F37254",
       },
       handler: async function (response) {
         paymentDetails.razorpay_payment_id = response.razorpay_payment_id;
@@ -51,10 +44,12 @@ function Checkout() {
         paymentDetails.razorpay_subscription_id =
           response.razorpay_subscription_id;
 
-        toast.success("Payment successful");
+        toast.success("Payment successfull");
 
         const res = await dispatch(verifyPurchase(paymentDetails));
         if (res?.payload?.success) {
+          // Fetch updated user data after verifying the purchase
+          await dispatch(getUserData());
           navigate("/checkout/success");
         } else {
           navigate("/checkout/fail");
@@ -65,37 +60,47 @@ function Checkout() {
     paymentObject.open();
   }
 
+  async function load() {
+    await dispatch(getRazorpayId());
+    await dispatch(purchaseCourseBundle());
+  }
+
+  useEffect(() => {
+    load();
+  }, []);
+
   return (
     <form
       onSubmit={handleSubscription}
-      className="min-h-[90vh] flex items-center justify-center text-[#333333]"
+      className="min-h-[90vh] flex items-center justify-center text-gray-700"
     >
-      <div className="w-80 h-[26rem] flex flex-col justify-center shadow-[0_0_10px_rgba(0,0,0,0.1)] rounded-lg relative bg-white">
-        <h1 className="bg-[#F59E0B] absolute top-0 w-full text-center py-4 text-2xl font-bold rounded-t-lg">
+      <div className="w-80 h-[26rem] flex flex-col justify-center shadow-[0_0_10px_black] rounded-lg relative">
+        <h1 className="bg-yellow-500 absolute top-0 w-full text-center py-4 text-2xl font-bold rounded-tl0lg rounded-tr-lg">
           Subscription Bundle
         </h1>
         <div className="px-4 space-y-5 text-center">
           <p className="text-[17px]">
-            This purchase will allow you to access all available courses on our
+            This purchase will allow you to access all available course of our
             platform for{" "}
-            <span className="text-[#F59E0B] font-bold">
+            <span className="text-yellow-500 font-bold">
               <br />1 Year duration
             </span>{" "}
-            All existing and newly launched courses will also be available.
+            All the existing and new launched courses will be also available
           </p>
-          <p className="flex items-center justify-center gap-1 text-2xl font-bold text-[#F59E0B]">
+
+          <p className="flex items-center justify-center gap-1 text-2xl font-bold text-yellow-500">
             <BiRupee />
             <span>499</span> only
           </p>
-          <div className="text-gray-600">
+          <div className="text-gray-800">
             <p>100% refund on cancellation</p>
-            <p>* Terms and conditions apply *</p>
+            <p>* Terms and conditions applied *</p>
           </div>
           <button
             type="submit"
-            className="bg-[#F59E0B] hover:bg-[#E58E0A] transition-all ease-in-out duration-300 absolute bottom-0 w-full left-0 text-xl font-bold rounded-bl-lg rounded-br-lg py-2"
+            className="bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-300 absolute bottom-0 w-full left-0 text-xl font-bold rounded-bl-lg rounded-br-lg py-2"
           >
-            Buy Now
+            Buy now
           </button>
         </div>
       </div>

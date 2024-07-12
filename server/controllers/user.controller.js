@@ -6,7 +6,7 @@ import sendEmail from "../utils/sendmail.util.js";
 import crypto from "crypto";
 
 const cookieoptions = {
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  maxAge: 2 * 24 * 60 * 60 * 1000, // 7 days
   httpOnly: true,
   secure: true,
 };
@@ -32,7 +32,7 @@ export const register = async (req, res, next) => {
       avatar: {
         publicId: email,
         secureURL:
-          "https://www.pikpng.com/pngvi/iTmixmw_person-business-avatar-anonymous-png-image-person-black/",
+          "https://imgs.search.brave.com/77ZRisfSaNH4aeyPLkmYaaB42xFdIBhAG1UvBful8p8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzgzL2Jj/LzhiLzgzYmM4Yjg4/Y2Y2YmM0YjRlMDRk/MTUzYTQxOGNkZTYy/LmpwZw",
       },
     });
 
@@ -294,47 +294,64 @@ export const changePassword = async (req, res, next) => {
 };
 
 export const updateProfile = async (req, res, next) => {
-  const { fullname } = req.body;
-  const { id } = req.user.id;
-
-  const user = await User.findById(id);
-
-  if (!user) {
-    return next(new AppError("Invalid user id or user does not exist"));
-  }
-
-  if (fullname) {
-    user.fullname = fullname;
-  }
-
-  if (req.file) {
-    // Deletes the old image uploaded by the user
-    await cloudinary.v2.uploader.destroy(user.avatar.publicId);
-  }
-
   try {
-    const result = await cloudinary.v2.uploader.upload(req.file.path, {
-      folder: "lms",
-      height: 250,
-      gravity: "faces",
-      crop: "fill",
-    });
+    const { fullname } = req.body;
+    const { id } = req.params;
 
-    if (result) {
-      user.avatar.publicId = result.public_id;
-      user.avatar.secureURL = result.secure_url;
-      fs.rm(`uploads/${req.file.filename}`);
+    const user = await User.findById(id);
+
+    if (!user) {
+      return next(new AppError("Invalid user id or user does not exist"));
     }
-  } catch (error) {
-    return next(
-      new AppError(error || "File not uploaded, please try again", 400)
-    );
-  }
-  // Save the user object
-  await user.save();
 
-  res.status(200).json({
-    success: true,
-    message: "User details updated successfully",
-  });
+    if (fullname) {
+      user.fullname = fullname;
+    }
+
+    if (req.file) {
+      // Deletes the old image uploaded by the user
+      await cloudinary.v2.uploader.destroy(user.avatar.publicId);
+    }
+
+    try {
+      const result = await cloudinary.v2.uploader.upload(req.file.path, {
+        folder: "lms",
+        height: 250,
+        gravity: "faces",
+        crop: "fill",
+      });
+
+      if (result) {
+        user.avatar.publicId = result.public_id;
+        user.avatar.secureURL = result.secure_url;
+        fs.rm(`uploads/${req.file.filename}`);
+      }
+    } catch (error) {
+      return next(
+        new AppError(error || "File not uploaded, please try again", 400)
+      );
+    }
+    // Save the user object
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "User details updated successfully",
+    });
+  } catch (error) {
+    return next(new AppError(error), 500);
+  }
+};
+
+export const getAll = async (req, res, next) => {
+  try {
+    const count = await User.countDocuments({});
+    res.status(200).json({
+      success: true,
+      message: "User count fetched successfully",
+      count: count,
+    });
+  } catch (error) {
+    return next(new AppError("Failed to fetch users", 404));
+  }
 };

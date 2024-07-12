@@ -25,7 +25,7 @@ const userSchema = new Schema(
     password: {
       type: "String",
       required: [true, "Please enter a password to continue"],
-      password: [8, "Password must be atleast 8 characters"],
+      minLength: [8, "Password must be atleast 8 characters"],
       select: false, // password is not shown by default
     },
     avatar: {
@@ -67,7 +67,12 @@ userSchema.pre("save", async function (next) {
 userSchema.methods = {
   generateJWTtoken: function () {
     return jwt.sign(
-      { id: this._id, email: this.email, role: this.role },
+      {
+        id: this._id,
+        email: this.email,
+        role: this.role,
+        subscription: this.subscription,
+      },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRY }
     );

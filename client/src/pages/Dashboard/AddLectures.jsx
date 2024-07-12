@@ -30,7 +30,7 @@ function AddLectures() {
   function handleVideo(e) {
     const video = e.target.files[0];
     const source = window.URL.createObjectURL(video);
-    console.log(source);
+
     setUserInput({
       ...userInput,
       lecture: video,
@@ -44,16 +44,29 @@ function AddLectures() {
       toast.error("All fields are mandatory");
       return;
     }
-    const response = await dispatch(addCourseLectures(userInput));
-    if (response?.payload?.success) {
-      navigate(-1);
-      setUserInput({
-        id: courseDetails?._id,
-        lecture: undefined,
-        title: "",
-        description: "",
-        videoSrc: "",
-      });
+
+    const formData = new FormData();
+    formData.append("lecture", userInput.lecture);
+    formData.append("title", userInput.title);
+    formData.append("description", userInput.description);
+    formData.append("id", userInput.id); // Append 'id' as part of the form data
+
+    try {
+      const response = await dispatch(addCourseLectures(formData));
+      if (response?.payload?.success) {
+        navigate(-1);
+        setUserInput({
+          id: courseDetails?._id,
+          lecture: undefined,
+          title: "",
+          description: "",
+          videoSrc: "",
+        });
+      } else {
+        toast.error("Failed to add lecture. Please try again.");
+      }
+    } catch (error) {
+      toast.error("An error occurred. Please try again.");
     }
   }
 
@@ -121,7 +134,7 @@ function AddLectures() {
           )}
           <button
             type="submit"
-            className="btn btn-primary py-1 font-semibold text-lg bg-green-500 text-white rounded"
+            className=" py-1 font-semibold text-lg bg-green-500 text-white rounded hover:bg-green-600"
           >
             Add new Lecture
           </button>

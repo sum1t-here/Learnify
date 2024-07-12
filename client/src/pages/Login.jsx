@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import loginimg from "../assets/login.png";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
+
 import { login } from "../Redux/Slices/AuthSlice";
 import { isValidEmail, isValidPassword } from "../helpers/regexMatcher";
 function Login() {
@@ -35,6 +36,7 @@ function Login() {
     }
 
     if (!isValidPassword(loginData.password)) {
+      console.log(!isValidPassword(loginData.password));
       toast.error(
         "Password must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
       );

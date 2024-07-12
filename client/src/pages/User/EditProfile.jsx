@@ -52,9 +52,9 @@ function EditProfile() {
       return;
     }
     const formData = new FormData();
-    formData.append("fullName", data.fullname);
+    formData.append("fullname", data.fullname);
     formData.append("avatar", data.avatar);
-    await dispatch(updateProfile([data._id, formData]));
+    await dispatch(updateProfile([data.userId, formData]));
     await dispatch(getUserData());
     navigate("/user/profile");
   }
@@ -83,7 +83,7 @@ function EditProfile() {
           type="file"
           id="image_uploads"
           name="image_uploads"
-          accept=".jpg, .png, .svg, .jpeg"
+          accept=".jpg, .png, .svg, .jpeg, .webp"
         />
         <div className="flex flex-col gap-1">
           <label htmlFor="fullname" className="text-lg font-semibold">

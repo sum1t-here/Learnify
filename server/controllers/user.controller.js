@@ -55,7 +55,7 @@ export const register = async (req, res, next) => {
           user.avatar.secureURL = result.secure_url;
 
           // remove file from the folder
-          fs.rm(`tmp/${req.file.filename}`);
+          fs.rm(`uploads/${req.file.filename}`);
         }
       } catch (err) {
         return next(
@@ -324,7 +324,7 @@ export const updateProfile = async (req, res, next) => {
       if (result) {
         user.avatar.publicId = result.public_id;
         user.avatar.secureURL = result.secure_url;
-        fs.rm(`tmp/${req.file.filename}`);
+        fs.rm(`uploads/${req.file.filename}`);
       }
     } catch (error) {
       return next(

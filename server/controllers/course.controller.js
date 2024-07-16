@@ -67,7 +67,7 @@ export const createCourse = async (req, res, next) => {
         course.thumbnail.secure_url = result.secure_url;
       }
 
-      fs.rm(`tmp/${req.file.filename}`);
+      fs.rm(`uploads/${req.file.filename}`);
     }
     await course.save();
     res.status(200).json({
@@ -78,8 +78,8 @@ export const createCourse = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     // Empty the uploads directory without deleting the uploads directory
-    for (const file of await fs.readdir("tmp/")) {
-      await fs.unlink(path.join("tmp/", file));
+    for (const file of await fs.readdir("uploads/")) {
+      await fs.unlink(path.join("uploads/", file));
     }
 
     return next(new AppError(err.message, 404));
@@ -170,7 +170,7 @@ export const addLecturesByCourseId = async (req, res, next) => {
       }
 
       // After successful upload remove the file from local storage
-      fs.rm(`tmp/${req.file.filename}`);
+      fs.rm(`uploads/${req.file.filename}`);
     }
     course.lectures.push({
       title,
@@ -192,8 +192,8 @@ export const addLecturesByCourseId = async (req, res, next) => {
     });
   } catch (err) {
     // Empty the uploads directory without deleting the uploads directory
-    for (const file of await fs.readdir("tmp/")) {
-      await fs.unlink(path.join("tmp/", file));
+    for (const file of await fs.readdir("uploads/")) {
+      await fs.unlink(path.join("uploads/", file));
     }
     console.log(err);
     return next(new AppError(err, 404));

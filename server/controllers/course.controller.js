@@ -1,4 +1,3 @@
-import { error } from "console";
 import Course from "../models/course.model.js";
 import AppError from "../utils/error.util.js";
 import cloudinary from "cloudinary";

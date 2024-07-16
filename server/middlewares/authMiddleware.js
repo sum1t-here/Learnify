@@ -4,12 +4,14 @@ import jwt from "jsonwebtoken";
 
 export const isLoggedIn = async (req, res, next) => {
   const { token } = req.cookies;
+  console.log("Cookies received:", req.cookies); // Add logging for cookies
 
   if (!token) {
     return next(new AppError("Unauthenticated, please login", 404));
   }
 
   const userDetails = await jwt.verify(token, process.env.JWT_SECRET);
+  console.log("Token verified successfully:", userDetails); // Add logging for token verification
 
   req.user = userDetails;
 

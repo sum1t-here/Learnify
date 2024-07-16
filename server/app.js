@@ -24,14 +24,14 @@ app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-app.use("/", (req, res) => {
-  res.send("Welcome to Learnify backend");
-});
-
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/course", courseRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1", miscRoutes);
+
+app.use("/", (req, res) => {
+  res.send("Welcome to Learnify backend");
+});
 
 app.all("*", (req, res) => {
   res

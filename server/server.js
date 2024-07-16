@@ -47,7 +47,7 @@ app.use("/api/v1/course", courseRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1", miscRoutes);
 
-app.use("/", (req, res) => {
+app.use("/welcome", (req, res) => {
   res.send("Welcome to Learnify backend");
 });
 

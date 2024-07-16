@@ -59,7 +59,13 @@ app.all("*", (req, res) => {
 
 app.use(errorMiddleware);
 
-app.listen(port, async () => {
-  await connectionToDb();
-  console.log(`App is running at http://localhost:${port}`);
-});
+// Start the server only if not in a Vercel environment
+if (process.env.NODE_ENV !== "vercel") {
+  app.listen(port, async () => {
+    await connectionToDb();
+    console.log(`App is running at http://localhost:${port}`);
+  });
+}
+
+// For Vercel, the default export should be the app instance
+export default app;

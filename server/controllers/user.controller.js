@@ -55,7 +55,7 @@ export const register = async (req, res, next) => {
           user.avatar.secureURL = result.secure_url;
 
           // remove file from the folder
-          fs.rm(`uploads/${req.file.filename}`);
+          fs.rm(`tmp/${req.file.filename}`);
         }
       } catch (err) {
         return next(

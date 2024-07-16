@@ -19,12 +19,18 @@ const port = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: [process.env.FRONTEND_URL],
-    credentials: true,
-  })
-);
+// CORS configuration
+const corsOptions = {
+  origin: process.env.FRONTEND_URL, // Allow only this origin
+  methods: ["GET", "POST", "PUT", "DELETE"], // Allow these HTTP methods
+  credentials: true, // Allow sending cookies with the request
+};
+
+// CORS middleware
+app.use(cors(corsOptions));
+
+// CORS preflight handler
+app.options("*", cors(corsOptions));
 
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));

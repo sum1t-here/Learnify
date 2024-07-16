@@ -21,3 +21,5 @@ app.listen(port, async () => {
   await connectionToDb();
   console.log(`App is running at http://localhost:${port}`);
 });
+
+export default app;

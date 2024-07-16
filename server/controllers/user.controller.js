@@ -324,7 +324,7 @@ export const updateProfile = async (req, res, next) => {
       if (result) {
         user.avatar.publicId = result.public_id;
         user.avatar.secureURL = result.secure_url;
-        fs.rm(`uploads/${req.file.filename}`);
+        fs.rm(`tmp/${req.file.filename}`);
       }
     } catch (error) {
       return next(

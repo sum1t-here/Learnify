@@ -6,9 +6,9 @@ import sendEmail from "../utils/sendmail.util.js";
 import crypto from "crypto";
 
 const cookieoptions = {
-  maxAge: 2 * 24 * 60 * 60 * 1000, // 7 days
+  maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", // Ensure secure cookies in production
+  secure: process.env.NODE_ENV === "production" ? true : false, // Ensure secure cookies in production
   sameSite: "None", // Set SameSite attribute for cross-site requests
 };
 

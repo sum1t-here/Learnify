@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-app.use("/welcome", (req, res) => {
+app.use("/", (req, res) => {
   res.send("Welcome to Learnify backend");
 });
 

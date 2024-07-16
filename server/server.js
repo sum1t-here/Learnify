@@ -17,7 +17,9 @@ export const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET,
 });
 
-app.listen(port, async () => {
+const server = app.listen(port, async () => {
   await connectionToDb();
   console.log(`App is running at http://localhost:${port}`);
 });
+
+export default server;
